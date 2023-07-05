@@ -159,6 +159,7 @@ Problems that we have when working with virtual machines?
 - Setup complexity
 - They are not regulated by any standard
 
+
       Process A  | PS B
     ---------------------
       Operating System

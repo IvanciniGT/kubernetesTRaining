@@ -1,0 +1,59 @@
+# YAML is a language to structure information: JSON or XML
+
+# One YAML file can contain multiple YAML documents
+# Documents are separated from each other by using ---
+---
+# With this hash char, we can supply comments
+---
+# One document is what we are going to call A NODE (just one)
+--- 
+# We have 2 types of NODES: Scalar and COLLECTIONS
+---
+# Scalar nodes: Represent one single value
+# Numbers:
+3
+---
+3.198
+---
+-20
+---
+# Booleans
+true # TRUE True
+---
+false # FALSE False
+---
+# Texts
+We can write texts without quotes
+---
+'We can write texts between single quotes'
+---
+"We can write texts between double quotes"
+---
+# COLLECTIONS: ORDERED LISTS and UNORDERED MAPS
+---
+# Ordered Lists: Are ordered sequence of nodes
+- item 1
+- item 2
+- item 3
+- 89
+- true
+- 
+    - subitem1
+    - 2
+-               - subitem1
+                - 2
+---
+# Unordered Maps: It is an unordered sequence of nodes, each one being identified by a UNIQUE KEY
+key1: item 1
+key2: 89
+key3: true
+---
+key2: 89
+key1: item 1
+key3: true
+---
+# Every single Kubernetes YAML document is an UNORDERED MAP
+---
+# Each program using YAML specifies its own YAML SCHEMA
+# A YAML SCHEMA specifies the structure that a document should contain
+# Dureing the trainng we need to learn KUBERNETES YAML SCHEMA

@@ -1,0 +1,19 @@
+kind:           Pod
+apiVersion:     v1
+metadata:
+    name:       my-first-pod
+    #namespace:  my-namespace           We never do this.
+                                        # Usually we will deploy this pod to multiple namespaces
+spec:
+    containers: # List of container
+        -   # This is going to be a container
+            name:   container1
+            image:  nginx:latest
+                # Controls when the image is going to be downloaded
+            imagePullPolicy: IfNotPresent #always      #TODO: Talk more about this attribute
+            
+#        -   # This would be another container
+#            name:   container2
+
+# $ kubectl apply -f 1-pod.yaml -n my-namespace
+                                # --namespace

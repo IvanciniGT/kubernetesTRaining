@@ -1,0 +1,16 @@
+                # Allows us to define the kind of object that we are defining here
+kind:           Namespace
+                # Allows us to define the library and version inside our cluster where that object type is defined
+                #       libraryID/version
+                # Kubernetes standard library does not have an id. For this library we just supply the version
+apiVersion:     v1 # Version 1 of the standard Kubernetes Lirbary
+                # That allos to define additional information of this object
+metadata:       
+    name:       my-namespace
+
+# To create this namespace: 
+# $ kubectl apply -f 0-namespace.yaml
+# $ kubectl create -f 0-namespace.yaml
+
+# To delete this namespace: 
+# $ kubectl delete -f 0-namespace.yaml
