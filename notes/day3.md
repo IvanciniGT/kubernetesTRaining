@@ -12,6 +12,7 @@ Kubernetes is not a single program, but a bunch of them.
         - Kubernetes DNS Server
         - Kubernetes API Manager
         - Kubernetes scheduller. This one decides where (in which node) a new pod is going to be deployed
+        - Kubernetes proxy: This one manages netFilter Rules on each host
         - ...
 
 We are still missing a Virtual Network Driver.
@@ -53,9 +54,10 @@ Right after that, we will supply those YAML files to Kubernetes... and Kubernete
 
 - Namespace
     - Pod
-    - StatefulSet
-    - Deployment
-    - DaemonSet
+    - PodTemplates:
+        - StatefulSet
+        - Deployment: Pod Template + initial number of replicas
+        - DaemonSet: Pod template (Kubernetes is going to create 1 pod per host, using that template)
     - ConfigMap
     - Secret
     - PersistentVolumeClaim
@@ -141,9 +143,10 @@ Containers are created from container images... that contain a software already 
 In kubernetes we cannot deploy containers... always we deploy pods.
 
 A pod is a set of containers, that:
-- They share netowrk configuration
+- They share network configuration
 - They are going to be deployed on the same host
 - They may share local volumes (that can share files)
+- They scale together
         
         
 ---

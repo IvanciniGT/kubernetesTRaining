@@ -1,9 +1,12 @@
 kind:           Pod
 apiVersion:     v1
 metadata:
-    name:       my-first-pod
+    name:       my-first-pod            # Must be unique. Each pod needs to have its own name
     #namespace:  my-namespace           We never do this.
                                         # Usually we will deploy this pod to multiple namespaces
+    labels:
+        app:    app1                    # The name "app:" is just a convention.
+                                        # We could use whatever name rigth there
 spec:
     containers: # List of container
         -   # This is going to be a container

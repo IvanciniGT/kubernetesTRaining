@@ -1,0 +1,15 @@
+kind:           Service
+apiVersion:     v1
+metadata:       
+    name:       nginx-service # This is the dns name
+
+spec: 
+    type:       ClusterIP     # LoadBalancer | NodePort
+    ports:
+        -   port:           81 # Is the one which is going to be opened in the Load balancing IP (Service IP)
+            targetPort:     80 # The port in the pods (containers inside the pods)
+            # nodePort:   30080 # Need to be above port 30000
+            # ^ Only if service is of type NodePort
+    selector:                   # This allow to bnd the service with the pods
+        # We will add at least 1 label that is actually assigned to all the pods that are going to provide this service
+        app:    app1
