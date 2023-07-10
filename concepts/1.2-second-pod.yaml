@@ -1,0 +1,22 @@
+kind:           Pod
+apiVersion:     v1
+metadata:
+    name:       my-second-pod            # Must be unique. Each pod needs to have its own name
+    #namespace:  my-namespace           We never do this.
+                                        # Usually we will deploy this pod to multiple namespaces
+    labels:
+        app:    app1                    # The name "app:" is just a convention.
+                                        # We could use whatever name rigth there
+spec:
+    containers: # List of container
+        -   # This is going to be a container
+            name:   container1
+            image:  nginx:latest
+                # Controls when the image is going to be downloaded
+            imagePullPolicy: IfNotPresent #always      #TODO: Talk more about this attribute
+            
+#        -   # This would be another container
+#            name:   container2
+
+# $ kubectl apply -f 1-pod.yaml -n my-namespace
+                                # --namespace

@@ -33,7 +33,7 @@
   ||                  v     |         nginx.conf | wp.conf 
   ||                  v     |             db_url: mariadb-service:3307
   ||                  v     |- 10.10.0.105 - IngressController (nginx) - Reverse Proxy
-  ||                  v                                 app1.mycompany.com -> nginx-service:81 <<< Ingress 
+  ||                  v                                 app1.mycompany.com -> nginx-service:81  <<< Ingress 
   ||                  v                                 app2.mycompany.com -> nginx-service1:81 <<< Ingress 
   ||                  v                                 app3.mycompany.com -> nginx-service2:81 <<< Ingress 
   ||                  v                                 app4.mycompany.com -> nginx-service3:81 <<< Ingress 

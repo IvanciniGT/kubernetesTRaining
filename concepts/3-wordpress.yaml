@@ -1,0 +1,73 @@
+# Wordpress pod
+
+kind:           Pod
+apiVersion:     v1
+metadata:
+    name:       my-wp-pod
+    labels:
+        app:    wp
+spec:           
+    containers:
+        -   name:   container1
+            image:  wordpress:6.2-apache
+            env:
+                -   name:   WORDPRESS_DB_HOST
+                    value:  db-service:3306
+                -   name:   WORDPRESS_DB_USER
+                    value:  wp-user
+                -   name:   WORDPRESS_DB_PASSWORD
+                    value:  password
+                -   name:   WORDPRESS_DB_NAME
+                    value:  wp-database
+---
+# Database Pod
+kind:           Pod
+apiVersion:     v1
+metadata:
+    name:       my-db-pod
+    labels:
+        app:    db
+spec:           
+    containers:
+        -   name:   container1
+            image:  mariadb:11.0
+            env:
+                -   name:   MARIADB_ROOT_PASSWORD
+                    value:  password
+                -   name:   MARIADB_DATABASE
+                    value:  wp-database
+                -   name:   MARIADB_USER
+                    value:  wp-user
+                -   name:   MARIADB_PASSWORD
+                    value:  password
+---
+# Database service
+kind:           Service
+apiVersion:     v1
+metadata:   
+    name:       db-service
+spec:
+    type:       ClusterIP
+    ports:
+        -   port:       3306
+            targetPort: 3306
+    selector:
+        app:    db
+---
+# In order to expose wordpress functionality to the outside world, we have 3 options:
+# - NodePort Service
+# x LoadBalancer Service
+# x ClusterIP + Thru an IngressController by setting an Ingress (rule)
+kind:           Service
+apiVersion:     v1
+metadata:   
+    name:       wp-service
+spec:
+    type:       NodePort
+    ports:
+        -   port:        80
+            targetPort:  80
+            nodePort: 30081
+    selector:
+        app:    wp
+---
