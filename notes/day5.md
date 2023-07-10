@@ -102,3 +102,18 @@ What sould we use in a productionn environment?
 2 Minor         New features
                 New Deprecateds
 1 Patch         When we fix a bug
+---
+
+kubectl get all
+
+all =
+    pods
+    services
+    deployments
+    statefulsets
+    daemonsets
+    
+but it does not include:
+    configmaps
+    secrets
+    pvc
