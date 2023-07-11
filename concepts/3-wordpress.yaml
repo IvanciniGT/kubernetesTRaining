@@ -98,6 +98,7 @@ spec:
                     #    type: DirectoryOrCreate
                     persistentVolumeClaim:
                         claimName: my-wordpress-volume-claim
+            # affinities and tolerations
             containers:
                 -   name:   container1
                     image:  wordpress:6.2-apache
