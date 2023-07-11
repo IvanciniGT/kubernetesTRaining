@@ -1,0 +1,8 @@
+kind:           Configmap
+apiVersion:     v1
+metadata:
+    name:       my-wp-configuration
+    
+data:
+    name_of_my_database:    wp-database
+    username:               wp-user   

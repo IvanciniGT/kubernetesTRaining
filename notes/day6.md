@@ -13,3 +13,9 @@ A pod template + a number of replicas
 
 - Statefulset
 - Daemonset
+
+# Object that allow to parameterize containers
+
+- Configmap
+- Secret            Secrets store values encrypted within the Kubernetes DATABASE.
+                    Not in the source file (where they are defined in base64)

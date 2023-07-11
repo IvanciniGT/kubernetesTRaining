@@ -6,7 +6,7 @@ metadata:
     name:       my-wp-deployment
 
 spec:
-    replicas: 2
+    replicas: 2  # we can change that in the future with $ kubectl scale deployment my-wp-deployment -n MYNAMESPACE --replicas=5
     selector: 
         matchLabels:
             app:        wp
@@ -23,11 +23,21 @@ spec:
                         -   name:   WORDPRESS_DB_HOST
                             value:  db-service:3306
                         -   name:   WORDPRESS_DB_USER
-                            value:  wp-user
+                            valueFrom:  
+                                configMapKeyRef:
+                                    name: my-wp-configuration
+                                    key:  username
                         -   name:   WORDPRESS_DB_PASSWORD
-                            value:  password            # This is a problem... a problem that has no solution in kubernetes!
+                            valueFrom:  
+                                secretKeyRef:
+                                    name: my-wp-secret-configuration
+                                    key:  user_password
                         -   name:   WORDPRESS_DB_NAME
-                            value:  wp-database
+                            valueFrom:  
+                                configMapKeyRef:
+                                    name: my-wp-configuration
+                                    key:  name_of_my_database
+
 ---
 # Database Pod
 kind:           Deployment
@@ -50,14 +60,24 @@ spec:
                     imagePullPolicy: IfNotPresent
                     env:
                         -   name:   MARIADB_ROOT_PASSWORD
-                            value:  password
-                        -   name:   MARIADB_DATABASE
-                            value:  wp-database
+                            valueFrom:  
+                                secretKeyRef:
+                                    name: my-wp-secret-configuration
+                                    key:  root_user_password                        -   name:   MARIADB_DATABASE
+                            valueFrom:  
+                                configMapKeyRef:
+                                    name: my-wp-configuration
+                                    key:  name_of_my_database
                         -   name:   MARIADB_USER
-                            value:  wp-user
+                            valueFrom:  
+                                configMapKeyRef:
+                                    name: my-wp-configuration
+                                    key:  username
                         -   name:   MARIADB_PASSWORD
-                            value:  password
----
+                            valueFrom:  
+                                secretKeyRef:
+                                    name: my-wp-secret-configuration
+                                    key:  user_password---
 # Database service
 kind:           Service
 apiVersion:     v1
