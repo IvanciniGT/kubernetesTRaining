@@ -63,7 +63,8 @@ spec:
                             valueFrom:  
                                 secretKeyRef:
                                     name: my-wp-secret-configuration
-                                    key:  root_user_password                        -   name:   MARIADB_DATABASE
+                                    key:  root_user_password 
+                        -   name:   MARIADB_DATABASE
                             valueFrom:  
                                 configMapKeyRef:
                                     name: my-wp-configuration
@@ -77,7 +78,8 @@ spec:
                             valueFrom:  
                                 secretKeyRef:
                                     name: my-wp-secret-configuration
-                                    key:  user_password---
+                                    key:  user_password
+---
 # Database service
 kind:           Service
 apiVersion:     v1
