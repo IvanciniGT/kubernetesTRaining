@@ -1,3 +1,78 @@
+kind:           PersistentVolume
+apiVersion:     v1
+metadata:
+    name:       the-wordpress-volume
+
+spec:
+    capacity:
+        storage: 1Gi
+    storageClassName: slow   # Kind of storage
+    accessModes:
+        - ReadWriteOncePod # I want a volume for me. Don'0t share this volume with anybody else!
+    # Right here below... is whhere they are going to supply the actual volume information
+    hostPath: # In a real cluster we should use a different volume type... FOR SURE !!! 
+        path: /home/ubuntu/environment/data/wp/app
+        type: DirectoryOrCreate
+    #awsVolume....
+---
+### THIS DOCUMENT is not going to be created by me... but by the cluster administrator!
+# A persistent volume is not a physical volume... but a reference to a physical volume, previously created.
+kind:           PersistentVolume
+apiVersion:     v1
+metadata:
+    name:       the-database-volume
+
+spec:
+    capacity:
+        storage: 15Gi
+    storageClassName: fast   # Kind of storage
+    accessModes:
+        - ReadWriteOncePod # I want a volume for me. Don'0t share this volume with anybody else!
+    # Right here below... is whhere they are going to supply the actual volume information
+    hostPath: # In a real cluster we should use a different volume type... FOR SURE !!! 
+        path: /home/ubuntu/environment/data/wp/mariadb
+        type: DirectoryOrCreate
+    #awsVolume....
+    #fcVolume...
+    #nfsVolume...
+    # The sys administrator is going to install a volume provider... 
+    # Which is a software that given a pvc creates a compliant pv, that Kb is going to assign to the pvc
+---
+# Kubernetes is going to match both objects: pv <> pvc
+#If I go to an store and I ask for a 2 Tbs HDD... and they just have a 4 Tbs HDD...
+---
+kind:           PersistentVolumeClaim
+apiVersion:     v1
+metadata:
+    name:       my-database-volume-claim
+
+spec:
+    resources:
+        requests:
+            storage: 10Gi
+    storageClassName: fast   # Kind of storage
+    accessModes:
+        - ReadWriteOncePod # I want a volume for me. Don'0t share this volume with anybody else!
+        #- ReadWriteOnce
+        #- ReadWriteMany
+        #- ReadOnlyMany
+---
+kind:           PersistentVolumeClaim
+apiVersion:     v1
+metadata:
+    name:       my-wordpress-volume-claim
+
+spec:
+    resources:
+        requests:
+            storage: 1Gi
+    storageClassName: slow   # Kind of storage
+    accessModes:
+        - ReadWriteOncePod # I want a volume for me. Don't share this volume with anybody else!
+        #- ReadWriteOnce
+        #- ReadWriteMany
+        #- ReadOnlyMany
+---
 # Wordpress pod
 
 kind:           Deployment
@@ -15,10 +90,28 @@ spec:
             labels:
                 app:    wp
         spec:           
+            volumes:
+                -   name:   my-wp-volume
+                    # Here we specify the volume type... incluidng its options
+                    #hostPath: # In a real cluster we should use a different volume type... FOR SURE !!! 
+                    #    path: /home/ubuntu/environment/data/wp/app
+                    #    type: DirectoryOrCreate
+                    persistentVolumeClaim:
+                        claimName: my-wordpress-volume-claim
             containers:
                 -   name:   container1
                     image:  wordpress:6.2-apache
+                    #resources:
+                    #    requests:
+                    #        cpu:
+                    #        memory:
+                    #    limits:
+                    #        cpu:
+                    #        memory:
                     imagePullPolicy: IfNotPresent
+                    volumeMounts:
+                        -   name:       my-wp-volume
+                            mountPath:  /var/www/html
                     env:
                         -   name:   WORDPRESS_DB_HOST
                             value:  db-service:3306
@@ -54,10 +147,18 @@ spec:
             labels:
                 app:    db
         spec:           
+            volumes:
+                -   name:   my-db-volume
+                    # Here we specify the volume type... incluidng its options
+                    persistentVolumeClaim:
+                        claimName: my-database-volume-claim
             containers:
                 -   name:   container1
                     image:  mariadb:11.0
                     imagePullPolicy: IfNotPresent
+                    volumeMounts:
+                        -   name: my-db-volume
+                            mountPath: /var/lib/mysql
                     env:
                         -   name:   MARIADB_ROOT_PASSWORD
                             valueFrom:  
@@ -79,6 +180,7 @@ spec:
                                 secretKeyRef:
                                     name: my-wp-secret-configuration
                                     key:  user_password
+
 ---
 # Database service
 kind:           Service
