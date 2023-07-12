@@ -27,7 +27,7 @@ spec:
         storage: 15Gi
     storageClassName: fast   # Kind of storage
     accessModes:
-        - ReadWriteOncePod # I want a volume for me. Don'0t share this volume with anybody else!
+        - ReadWriteOncePod # I want a volume for me. Don't share this volume with anybody else!
     # Right here below... is whhere they are going to supply the actual volume information
     hostPath: # In a real cluster we should use a different volume type... FOR SURE !!! 
         path: /home/ubuntu/environment/data/wp/mariadb
@@ -90,6 +90,8 @@ spec:
             labels:
                 app:    wp
         spec:           
+            nodeSelector:
+                gpu: "true"
             volumes:
                 -   name:   my-wp-volume
                     # Here we specify the volume type... incluidng its options
