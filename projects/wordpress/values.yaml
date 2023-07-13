@@ -1,0 +1,63 @@
+
+wordpressUsername: user
+wordpressPassword: "password"
+existingSecret: ""
+wordpressEmail: user@example.com
+wordpressFirstName: FirstName
+wordpressLastName: LastName
+wordpressBlogName: My super kubernetes blog!
+wordpressTablePrefix: wp_
+wordpressScheme: http
+
+
+replicaCount: 3
+
+resources:
+  limits: {}
+  requests:
+    memory: 500Gi
+    cpu: 300m
+
+service:
+  type: NodePort
+  nodePorts:
+    http: "30001"
+    https: "30002"
+    
+ingress:
+  hostname: mykubernetes.superblog.com
+  tls: true
+  selfSigned: true
+
+persistence:
+  enabled: false
+
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 11
+  targetCPU: 50
+  targetMemory: 50
+
+  ingress:
+    enabled: false
+ 
+ mariadb:
+
+  enabled: true
+
+  architecture: standalone
+  auth:
+    rootPassword: "password"
+    database: bitnami_wordpress
+    username: bn_wordpress
+    password: "password"
+
+  primary:
+    persistence:
+      enabled: false
+      storageClass: ""
+      accessModes:
+        - ReadWriteOnce
+      size: 8Gi
