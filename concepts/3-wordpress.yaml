@@ -8,7 +8,7 @@ spec:
         storage: 1Gi
     storageClassName: slow   # Kind of storage
     accessModes:
-        - ReadWriteOncePod # I want a volume for me. Don'0t share this volume with anybody else!
+        - ReadWriteMany
     # Right here below... is whhere they are going to supply the actual volume information
     hostPath: # In a real cluster we should use a different volume type... FOR SURE !!! 
         path: /home/ubuntu/environment/data/wp/app
@@ -68,9 +68,9 @@ spec:
             storage: 1Gi
     storageClassName: slow   # Kind of storage
     accessModes:
-        - ReadWriteOncePod # I want a volume for me. Don't share this volume with anybody else!
+        #- ReadWriteOncePod # I want a volume for me. Don't share this volume with anybody else!
         #- ReadWriteOnce
-        #- ReadWriteMany
+        - ReadWriteMany
         #- ReadOnlyMany
 ---
 # Wordpress pod
@@ -117,10 +117,10 @@ spec:
                     image:  wordpress:6.2-apache
                     resources:
                         requests:
-                            cpu: 2
+                            cpu: 1
                             memory: 2Gi
                         limits:
-                            cpu: 2
+                            cpu: 1
                             memory: 2Gi
                     imagePullPolicy: IfNotPresent
                     volumeMounts:
