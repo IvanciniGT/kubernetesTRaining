@@ -9,7 +9,6 @@ wordpressBlogName: My super kubernetes blog!
 wordpressTablePrefix: wp_
 wordpressScheme: http
 
-
 replicaCount: 3
 
 resources:
@@ -32,9 +31,8 @@ ingress:
 persistence:
   enabled: false
 
-
 autoscaling:
-  enabled: false
+  enabled: true
   minReplicas: 1
   maxReplicas: 11
   targetCPU: 50
@@ -43,7 +41,8 @@ autoscaling:
   ingress:
     enabled: false
  
- mariadb:
+
+mariadb:
 
   enabled: true
 
@@ -57,7 +56,3 @@ autoscaling:
   primary:
     persistence:
       enabled: false
-      storageClass: ""
-      accessModes:
-        - ReadWriteOnce
-      size: 8Gi
