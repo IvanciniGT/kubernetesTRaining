@@ -238,7 +238,8 @@ That tag allows to specify 3 different kind of affinities:
                 operator: In
                 values:
                 - db
-            topologyKey: client
+            topologyKey: kubernetes.io/hostname
+            
 
     I want my pod in a node which contains a label client... so that any node containing the same label and value contains a pod with label app = db
 

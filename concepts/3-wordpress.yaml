@@ -100,17 +100,28 @@ spec:
                     #    type: DirectoryOrCreate
                     persistentVolumeClaim:
                         claimName: my-wordpress-volume-claim
-            # affinities and tolerations
+            affinity:
+                podAntiAffinity:        
+                  preferredDuringSchedulingIgnoredDuringExecution:
+                  - weight: 1
+                    podAffinityTerm:
+                        labelSelector:
+                          matchExpressions:
+                          - key: app
+                            operator: In
+                            values:
+                            - wp
+                        topologyKey: kubernetes.io/hostname
             containers:
                 -   name:   container1
                     image:  wordpress:6.2-apache
-                    #resources:
-                    #    requests:
-                    #        cpu:
-                    #        memory:
-                    #    limits:
-                    #        cpu:
-                    #        memory:
+                    resources:
+                        requests:
+                            cpu: 2
+                            memory: 2Gi
+                        limits:
+                            cpu: 2
+                            memory: 2Gi
                     imagePullPolicy: IfNotPresent
                     volumeMounts:
                         -   name:       my-wp-volume
